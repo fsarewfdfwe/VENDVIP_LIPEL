@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+  <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <link href="{{ url_for('static', filename='css/simple-sidebar.css') }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/block_debug.js') }}"></script>
+<script type="text/javascript">
+var filter = "win16|win32|win64|mac";
+if(navigator.platform){
+if(0 > filter.indexOf(navigator.platform.toLowerCase())){
+}else{
+      devtoolsDetector.addListener(function(isOpen, detail) {
+        if (isOpen) {
+            swal.fire(
+              "개발자 도구 감지",
+              '개발자 도구가 감지 되었습니다.',
+              "error"
+          );
+		  window.location.href = `https://lipelvend.xyz/ban`
+          return;
+        }
+      });
+      devtoolsDetector.lanuch();
+}
+}
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(document).bind('keydown',function(e){
+            if ( e.keyCode == 123 ) {
+                e.preventDefault();
+                e.returnValue = false;
+            }
+        });
+    });
+</script>
+
+  <script>
+            function logout_button() {
+            Swal.fire({
+                title: '로그아웃', /*상단 타이틀*/
+                text: '정말로 로그아웃하시겠습니까?', /*내용*/
+                icon: 'success', /*아이콘 타입*/
+                showCancelButton: true,
+                cancelButtonColor: '#d33',
+                confirmButtonColor: '#009900',
+                confirmButtonText: '확인', /*확인버튼 클가*/
+                cancelButtonText: '취소'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.href = '../logout';
+              }
+            })
+          }
+  </script>
+
+  <title>Vend.vip™</title>
+
+</head>
+
+<body>
+
+  <div class="d-flex" id="wrapper">
+
+    <!-- Sidebar -->
+    <div class="bg-light border-right" id="sidebar-wrapper">
+      <div class="sidebar-heading">Vend.vip™</div>
+      <div class="list-group list-group-flush">
+        <a href="setting" class="list-group-item list-group-item-action bg-light">기본 설정</a>
+        <b><a href="manageuser" class="list-group-item list-group-item-action bg-light">유저 관리</a></b>
+        <a href="manageprod" class="list-group-item list-group-item-action bg-light">제품 관리</a>
+        <a href="log" class="list-group-item list-group-item-action bg-light">로그 조회</a>
+        {% if server_info[13] == 1 %}
+        <a href="managereq" class="list-group-item list-group-item-action bg-light">충전신청 관리</a>
+        {% endif %}
+        <a href="license" class="list-group-item list-group-item-action bg-light">라이센스 관리</a>
+      </div>
+    </div>
+    <!-- /#sidebar-wrapper -->
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+
+      <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <button class="btn btn-primary" id="menu-toggle">메뉴</button>&nbsp;&nbsp;
+        <button class='btn btn-primary' onclick='location.href="../login"'>홈</button>&nbsp;&nbsp;
+        <button class="btn btn-danger" onclick="logout_button();">로그아웃</button>
+      </nav>
+        <div class="container-fluid">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                  <th>아이디</th>
+                  <th>잔액</th>
+                  <th>아이피</th>
+                  <th>닉네임</th>
+                  <th>관리</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                <td>{{user[0]}}</td>
+                <td>{{user[3]}}원</td>
+                <td>{{user[2]}}</td>
+                <td>{{user[8]}}</td>
+                <td><button class='btn btn-primary' onclick='location.href="manageuser_detail?id={{user[0]}}"'>관리</button></td>
+                </tr>
+                {% endfor %}
+            </tbody> 
+            </table>
+          </div>
+        <!-- /#page-content-wrapper -->
+      </div>
+      </div>
+    </div>
+    <!-- /#page-content-wrapper -->
+
+  </div>
+  <!-- /#wrapper -->
+
+  <!-- Bootstrap core JavaScript -->
+
+  <!-- Menu Toggle Script -->
+  <script>
+    $("#menu-toggle").click(function(e) {
+      e.preventDefault();
+      $("#wrapper").toggleClass("toggled");
+    });
+  </script>
+
+</body>
+
+</html>

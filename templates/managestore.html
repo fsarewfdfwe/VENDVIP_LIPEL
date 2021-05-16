@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Vend.vip ADMIN</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+<style>
+.login-form {
+    width: 340px;
+    margin: 50px auto;
+  	font-size: 15px;
+}
+.login-form form {
+    margin-bottom: 15px;
+    background: #f7f7f7;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    padding: 30px;
+}
+.login-form h2 {
+    margin: 0 0 15px;
+}
+.form-control, .btn {
+    min-height: 38px;
+    border-radius: 2px;
+}
+.btn {        
+    font-size: 15px;
+    font-weight: bold;
+}
+</style>
+
+<script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">Vend.vip ADMIN</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/generate">코드 생성
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/managestore">상점 관리</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/managekey">코드 관리</a>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-danger btn-block" onclick="window.location.href='/logout';">로그아웃</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+<script>
+      function unlock() {
+      $.ajax({
+        url: "/unlock",
+        type: "post",
+        data: $("form").serialize(),
+      }).done(function(data) {
+          if (data == ("OK")){
+            Swal.fire({
+              title: '하드락 해제 성공',
+              icon: 'success',
+              text: '하드락이 해제되었습니다.',
+            });
+          }else{
+            Swal.fire({
+                title: '하드락 해제 실패',
+                icon: 'error',
+                html: data,
+            });
+          }
+      });
+    }
+
+    function copy(val) {
+      var dummy = document.createElement("textarea");
+      document.body.appendChild(dummy);
+      dummy.value = val;
+      dummy.select();
+      document.execCommand("copy");
+      document.body.removeChild(dummy);
+    }
+
+    function addtime() {
+      Swal.fire({
+        title: '전체 기간 추가',
+        html: '모든 유효한 코드에 기간을 추가합니다.<br>추가할 시간을 시간 단위로 적어주세요.',
+        input: 'text',
+        inputAttributes: {
+          autocapitalize: 'off'
+        },
+        showCancelButton: true,
+        confirmButtonText: '기간 추가',
+        cancelButtonText: '취소',
+        showLoaderOnConfirm: true,
+        preConfirm: (login) => {
+          $.ajax({
+            url: "/addall/" + login,
+            type: "post",
+          }).done(function(data) {
+              if (data.includes("OK")){
+                Swal.fire({
+                  title: '기간 추가 성공',
+                  icon: 'success',
+                  text: '성공적으로 추가되었습니다.',
+                });
+              }else{
+                Swal.fire({
+                    title: '기간 추가 실패',
+                    icon: 'error',
+                    html: data,
+                });
+              }
+          });
+        }
+      });
+    }
+
+    function search() {
+      Swal.fire({
+        title: '코드 검색',
+        html: '코드의 ID만 적어주세요.',
+        input: 'text',
+        inputAttributes: {
+          autocapitalize: 'off'
+        },
+        showCancelButton: true,
+        confirmButtonText: '검색',
+        cancelButtonText: '취소',
+        showLoaderOnConfirm: true,
+        preConfirm: (login) => {
+          window.location.href = "/manage?search=" + login
+        }
+      });
+    }
+
+    function deletecode(code){
+          const okno = confirm(`정말로 ${code}를 삭제 하시겠습니까?\n복구 불가능한 방법으로 영구적으로 제거됩니다.`);
+          if (okno == true){
+            var obj = new Object();
+            obj.code = code;
+            var jsonData = JSON.stringify(obj);
+
+            $.ajax({
+              url : "/managestore",
+              data : jsonData,
+              contentType:"application/json",
+              type : 'POST',
+            }).done(function(data) {
+                if (data == ("OK")){
+                  location.reload();
+                }else{
+                  Swal.fire({
+                      title: '삭제 실패',
+                      icon: 'error',
+                      html: data,
+                  });
+                }
+            });
+          }else{
+            alert("삭제를 취소 하셨습니다.");
+          }
+    }
+
+</script>
+
+<script type="text/javascript">
+jQuery(function($){ 
+	$(".table").DataTable(); 
+}); 
+</script>
+
+<div style="padding:50px;"> 
+<table class="table">
+  <thead>
+    <tr>
+       <th>상점 URL</th>
+       <th>삭제하기</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for store in store_list %}
+    <tr>
+       <td>{{store | replace(".db","")}}</td>
+       <td><button class='btn btn-danger' onclick='deletecode(`{{store}}`);'>[ 위험 ] 스토어 삭제</button></td></td>
+    </tr>
+    {% endfor %}
+  </tbody> 
+</div>
+ </table>
+</body>
+</html>

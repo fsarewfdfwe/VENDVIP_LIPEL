@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<style>
+    html {
+        background: url({{background}}) no-repeat center center fixed; 
+        -webkit-background-size: cover;
+          -moz-background-size: cover;
+            -o-background-size: cover;
+              background-size: cover;
+    }
+</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>{{name}}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/Login-Form-Dark.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+    <script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/bootstrap/js/bootstrap.min.js') }}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@3/dark.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/earlyaccess/jejugothic.css" rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/block_debug.js') }}"></script>
+<script type="text/javascript">
+var filter = "win16|win32|win64|mac";
+if(navigator.platform){
+if(0 > filter.indexOf(navigator.platform.toLowerCase())){
+}else{
+      devtoolsDetector.addListener(function(isOpen, detail) {
+        if (isOpen) {
+            swal.fire(
+              "개발자 도구 감지",
+              '개발자 도구가 감지 되었습니다.',
+              "error"
+          );
+		  window.location.href = `https://lipelvend.xyz/ban`
+          return;
+        }
+      });
+      devtoolsDetector.lanuch();
+}
+}
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(document).bind('keydown',function(e){
+            if ( e.keyCode == 123 ) {
+                e.preventDefault();
+                e.returnValue = false;
+            }
+        });
+    });
+</script>
+</head>
+
+<body>
+<div class="backgrounds"></div>
+    <div class="login-dark">
+        <form method="post">
+            <h2><left>로그인</left></h2>
+            <p><left>{{name}}에 방문해주셔서 감사합니다.</left></p>
+            <div class="form-group"><input class="form-control" name="id" placeholder="아이디" id="id"></div>
+            <div class="form-group"><input class="form-control" name="pw" type="password" placeholder="암호" id="pw"></div>
+            <div class="form-group"><button class="btn btn-primary btn-block" type="submit" id="login">로그인</button></div><a class="forgot" href="register">아이디가 없으신가요? 회원가입</a>
+        </form>
+    </div>
+    <script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/bootstrap/js/bootstrap.min.js') }}"></script>
+</body>
+
+</html>

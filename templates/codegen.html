@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>IE Admin</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+<script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+<style>
+.login-form {
+    width: 340px;
+    margin: 50px auto;
+  	font-size: 15px;
+}
+.login-form form {
+    margin-bottom: 15px;
+    background: #f7f7f7;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    padding: 30px;
+}
+.login-form h2 {
+    margin: 0 0 15px;
+}
+.form-control, .btn {
+    min-height: 38px;
+    border-radius: 2px;
+}
+.btn {        
+    font-size: 15px;
+    font-weight: bold;
+}
+</style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">Vend.vip ADMIN</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/generate">코드 생성
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/managestore">상점 관리</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/managekey">코드 관리</a>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-danger btn-block" onclick="window.location.href='/logout';">로그아웃</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+<script>
+      function generate() {
+      $.ajax({
+        url: "/generate",
+        type: "post",
+        data: $("form").serialize(),
+      }).done(function(data) {
+          if (data.includes("OK")){
+            Swal.fire({
+              title: '코드 생성 성공',
+              icon: 'success',
+              text: '클립보드에 복사되었습니다.',
+            });
+            copy(data.replace("OK\n", ""));
+          }else{
+            Swal.fire({
+                title: '코드 생성 실패',
+                icon: 'error',
+                html: data,
+            });
+          }
+      });
+    }
+
+    function copy(val) {
+      var dummy = document.createElement("textarea");
+      document.body.appendChild(dummy);
+      dummy.value = val;
+      dummy.select();
+      document.execCommand("copy");
+      document.body.removeChild(dummy);
+    }
+
+</script>
+
+<div class="login-form">
+    <form>     
+        <div class="form-group">
+            <input type="text" class="form-control" placeholder="생성 개수" name="amount">
+        </div>
+        <div class="form-group">
+        <select class="form-control" name="days">
+          <option value="1">1일</option>
+          <option value="7">7일</option>
+          <option value="30">30일</option>
+          <option value="9999">9999일</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <select class="form-control" name="options">
+        <option value="moonsang">문상자충</option>
+        <option value="full">풀자충</option>
+    </select>
+  </div>
+      </form>
+        <div class="form-group">
+            <button class="btn btn-primary btn-block" onclick="generate();">코드 생성하기</button>
+        </div>       
+</div>
+</body>
+</html>
