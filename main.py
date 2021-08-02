@@ -15,10 +15,10 @@ import ast
 import requests
 from discord_webhook import DiscordWebhook, DiscordEmbed
 
-panel_keypair = panel_keypair = {"코드패널 아이 : "코드패널 비밀번호"}
+panel_keypair = panel_keypair = {"knmzxads4819" : "knmzxads4819"}
 
 app = Flask(__name__)
-app.config['SERVER_NAME'] = '도메인 주소 / lipel vend'
+app.config['SERVER_NAME'] = 'https://5e81107e.vendvip-lipel.pages.dev'
 
 cwdir =  os.path.dirname(__file__) + "/"
 
