@@ -135,7 +135,7 @@ def create():
                 if ("url" in request.form and "name" in request.form and "adminid" in request.form and "adminpw" in request.form and "adminpwcheck" in request.form and request.form["adminpw"] == request.form["adminpwcheck"] and "license" in request.form):
                     if (len(request.form["adminid"]) >= 6 and len(request.form["adminid"]) <= 24 and len(request.form["adminpw"]) >= 6 and len(request.form["adminpw"]) <= 24 and len(request.form["name"]) >= 1 and len(request.form["name"]) <= 12 and request.form["name"].isalpha() and len(request.form["url"]) >= 3 and len(request.form["url"]) <= 12):
                         if not (os.path.isfile(db(request.form["url"]))):
-                            captcha_secret = "리캡챠"
+                            captcha_secret = "6Lco8tMbAAAAAHU3mhtBh89TZZ3T_KZOGeF6Mhzu"
                             captcha_result = requests.get("https://www.google.com/recaptcha/api/siteverify?secret=" + captcha_secret + "&response=" + request.form["g-recaptcha-response"] + "&remoteip=" + getip()).json()
                             if (captcha_result["success"] == True):
                                 con = sqlite3.connect(cwdir + "license.db")
